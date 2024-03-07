@@ -1,6 +1,9 @@
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.*;
 import com.formdev.flatlaf.*;
+import com.opencsv.CSVWriter;
 
 /**
  * Creates the UI for the guess-the-number game
@@ -67,7 +70,13 @@ public class GuessTheNumberUI {
         // TODO: your refactoring should include some changes to the lambda expression in the following line
         // HINT: Look at what GameOverPanel.setGameResults does now. Your code should do the same operations,
         //       but refactor how those are structured, which means the lambda will need to change.
-        JPanel humanGuessesPanel = new HumanGuessesPanel(cardsPanel, gameResult -> {gameOverPanel.setGameResults(gameResult);});
+        JPanel humanGuessesPanel = new HumanGuessesPanel(cardsPanel, gameResult -> {
+            try {
+                gameOverPanel.setGameResults(gameResult, new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
+            } catch (IOException e) {
+                System.out.println("IO EXCEPTION HUMAN_PLAY");
+            }
+        });
         addToCards(cardsPanel, humanGuessesPanel, ScreenID.HUMAN_PLAY.name());
 
         // COMPUTER_PLAY_LAUNCH
@@ -75,7 +84,13 @@ public class GuessTheNumberUI {
         addToCards(cardsPanel, computerPlayLaunchPanel, ScreenID.COMPUTER_PLAY_LAUNCH.name());
 
         // COMPUTER_PLAY
-        JPanel computerGuessesPanel = new ComputerGuessesPanel(cardsPanel, gameResult -> {gameOverPanel.setGameResults(gameResult);});
+        JPanel computerGuessesPanel = new ComputerGuessesPanel(cardsPanel, gameResult -> {
+            try {
+                gameOverPanel.setGameResults(gameResult, new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
+            } catch (IOException e) {
+                System.out.println("IO EXCEPTION COMPUTER_PLAY");
+            }
+        });
         addToCards(cardsPanel, computerGuessesPanel, ScreenID.COMPUTER_PLAY.name());
 
         // STATS

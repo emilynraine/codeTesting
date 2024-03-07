@@ -20,9 +20,43 @@ public class GameOverPanel extends JPanel {
     private JLabel answerTxt;
     private JLabel numGuessesTxt;
 
+    private JPanel cardsPanel;
+    private JPanel buttonPanel;
+
     public GameOverPanel(JPanel cardsPanel){
         this.gameResult = null;
+        this.cardsPanel = cardsPanel;
+        this.buttonPanel = new JPanel();
 
+        //UI setup
+        CreateGameOverPanelUI();
+        CreateRestartButton();
+        CreateQuitButton();
+
+        this.add(buttonPanel);
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
+
+    /**
+     * Sets the game results, updates the UI, and saves results to the log file (if human was playing)
+     */
+    // TODO: refactor this method
+    public void setGameResults(GameResult result, CSVWriter writer){
+        this.gameResult = result;
+
+        SetText(gameResult);
+
+        if(result.humanWasPlaying){
+            // write stats to file
+            String [] record = new String[2];
+            record[0] = LocalDateTime.now().toString();
+            record[1] = Integer.toString(result.numGuesses);
+
+            writer.writeNext(record);
+        }
+    }
+
+    public void CreateGameOverPanelUI() {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         JLabel title = new JLabel("Game Finished");
@@ -40,9 +74,9 @@ public class GameOverPanel extends JPanel {
         numGuessesTxt.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         this.add(Box.createRigidArea(new Dimension(0,60)));
+    }
 
-        JPanel buttonPanel = new JPanel();
-
+    public void CreateRestartButton() {
         JButton restart = new JButton("Play Again");
         restart.addActionListener(e -> {
             // See itemStateChanged in https://docs.oracle.com/javase/tutorial/uiswing/examples/layout/CardLayoutDemoProject/src/layout/CardLayoutDemo.java
@@ -52,7 +86,9 @@ public class GameOverPanel extends JPanel {
             cardLayout.show(cardsPanel, screenName);
         });
         buttonPanel.add(restart);
+    }
 
+    public void CreateQuitButton() {
         JButton quit = new JButton("Back to Home");
         quit.addActionListener(e -> {
             // See itemStateChanged in https://docs.oracle.com/javase/tutorial/uiswing/examples/layout/CardLayoutDemoProject/src/layout/CardLayoutDemo.java
@@ -60,39 +96,15 @@ public class GameOverPanel extends JPanel {
             cardLayout.show(cardsPanel, ScreenID.HOME.name());
         });
         buttonPanel.add(quit);
-
-        this.add(buttonPanel);
-        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
-    /**
-     * Sets the game results, updates the UI, and saves results to the log file (if human was playing)
-     */
-    // TODO: refactor this method
-    public void setGameResults(GameResult result){
-        this.gameResult = result;
-
+    public void SetText(GameResult result) {
         answerTxt.setText("The answer was " + result.correctValue + ".");
         if(result.numGuesses == 1){
             numGuessesTxt.setText((result.humanWasPlaying ? "You" : "I") + " guessed it on the first try!");
         }
         else {
             numGuessesTxt.setText("It took " + (result.humanWasPlaying ? "you" : "me") + " " + result.numGuesses + " guesses.");
-        }
-
-        if(result.humanWasPlaying){
-            // write stats to file
-            try(CSVWriter writer = new CSVWriter(new FileWriter(StatsFile.FILENAME, true))) {
-
-                String [] record = new String[2];
-                record[0] = LocalDateTime.now().toString();
-                record[1] = Integer.toString(result.numGuesses);
-
-                writer.writeNext(record);
-            } catch (IOException e) {
-                // NOTE: In a full implementation, we would log this error and possibly alert the user
-                // NOTE: For this project, you do not need unit tests for handling this exception.
-            }
         }
     }
 }

@@ -13,15 +13,21 @@ public class HumanGuessesGame {
     private int numGuesses;
     private boolean gameIsDone; // true iff makeGuess has been called with the target value
 
-    HumanGuessesGame(){
+    //TODO: Edit random
+    public HumanGuessesGame(){
         Random randGen = new Random();
-        this.target = randGen.nextInt(UPPER_BOUND) + 1;
+        this.target = GetRandom(randGen);
 
         numGuesses = 0;
         gameIsDone = false;
     }
 
-    GuessResult makeGuess(int value){
+    //Using dependency injection
+    public int GetRandom(Random random) {
+        return random.nextInt(UPPER_BOUND) + 1;
+    }
+
+    public GuessResult makeGuess(int value){
         numGuesses += 1;
 
         if(value < target){
