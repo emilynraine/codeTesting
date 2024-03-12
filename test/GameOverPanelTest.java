@@ -6,4 +6,6 @@ public class GameOverPanelTest {
 
     //TESTING setGameResults
 
+    //TESTING SetText
+
 }
