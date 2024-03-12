@@ -1,5 +1,10 @@
+import com.opencsv.CSVReader;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -9,16 +14,16 @@ import java.util.ArrayList;
  * TODO: refactor this class
  */
 public class StatsPanel extends JPanel {
-
+    public static final String FILENAME = "guess-the-number-stats.csv";
     private JPanel resultsPanel;
     private JPanel cardsPanel;
+    private GameStats stats;
 
     // Stats will display the number of games in each "bin"
     // A bin goes from BIN_EDGES[i] through BIN_EDGES[i+1]-1, inclusive
     private static final int [] BIN_EDGES = {1, 2, 4, 6, 8, 10, 12, 14};
     private ArrayList<JLabel> resultsLabels;
 
-    //TODO: Split functions out
     public StatsPanel(JPanel cardsPanel) {
         this.cardsPanel = cardsPanel;
 
@@ -38,33 +43,57 @@ public class StatsPanel extends JPanel {
         }
     }
 
-    //TODO: Split
-    private void updateResultsPanel(){
+    private void updateResultsPanel() {
         clearResults();
 
-        GameStats stats = new StatsFile();
+        try {
+            this.stats = new StatsFile(LocalDateTime.now().minusDays(30), new CSVReader(new FileReader(FILENAME)));
+        } catch (Exception e) {
+
+        }
 
         for(int binIndex=0; binIndex<BIN_EDGES.length; binIndex++){
-            final int lowerBound = BIN_EDGES[binIndex];
-            int numGames = 0;
-
-            if(binIndex == BIN_EDGES.length-1){
-                // last bin
-                // Sum all the results from lowerBound on up
-                for(int numGuesses=lowerBound; numGuesses<stats.maxNumGuesses(); numGuesses++){
-                    numGames += stats.numGames(numGuesses);
-                }
-            }
-            else{
-                int upperBound = BIN_EDGES[binIndex+1];
-                for(int numGuesses=lowerBound; numGuesses <= upperBound; numGuesses++) {
-                    numGames += stats.numGames(numGuesses);
-                }
-            }
-
             JLabel resultLabel = resultsLabels.get(binIndex);
-            resultLabel.setText(Integer.toString(numGames));
+            resultLabel.setText(Integer.toString(updateResultsNums(binIndex)));
         }
+    }
+
+    // TODO: TEST
+    private int updateResultsNums(int binIndex) {
+        final int lowerBound = BIN_EDGES[binIndex];
+        int numGames = 0;
+
+        if(binIndex == BIN_EDGES.length-1){
+            // last bin
+            // Sum all the results from lowerBound on up
+            for(int numGuesses=lowerBound; numGuesses<stats.maxNumGuesses(); numGuesses++){
+                numGames += stats.numGames(numGuesses);
+            }
+        }
+        else{
+            int upperBound = BIN_EDGES[binIndex+1];
+            for(int numGuesses=lowerBound; numGuesses <= upperBound; numGuesses++) {
+                numGames += stats.numGames(numGuesses);
+            }
+        }
+        return numGames;
+    }
+
+    // TODO: TEST
+    private int calculateNumGames(int lowerBound, int binIndex) {
+        int numGames = 0;
+        if (binIndex == BIN_EDGES.length - 1) {
+            // Last bin: Sum all the results from lowerBound on up
+            for (int numGuesses = lowerBound; numGuesses < stats.maxNumGuesses(); numGuesses++) {
+                numGames += stats.numGames(numGuesses);
+            }
+        } else {
+            int upperBound = BIN_EDGES[binIndex + 1];
+            for (int numGuesses = lowerBound; numGuesses <= upperBound; numGuesses++) {
+                numGames += stats.numGames(numGuesses);
+            }
+        }
+        return numGames;
     }
 
     public void StatsPanelUI() {

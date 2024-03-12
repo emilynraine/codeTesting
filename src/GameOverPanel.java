@@ -40,8 +40,8 @@ public class GameOverPanel extends JPanel {
     /**
      * Sets the game results, updates the UI, and saves results to the log file (if human was playing)
      */
-    // TODO: refactor this method
-    public void setGameResults(GameResult result, CSVWriter writer){
+    // TODO: TEST
+    public void setGameResults(GameResult result, CSVWriter writer){ //dependency injection
         this.gameResult = result;
 
         SetText(gameResult);
@@ -98,6 +98,7 @@ public class GameOverPanel extends JPanel {
         buttonPanel.add(quit);
     }
 
+    // TODO: TEST
     public void SetText(GameResult result) {
         answerTxt.setText("The answer was " + result.correctValue + ".");
         if(result.numGuesses == 1){

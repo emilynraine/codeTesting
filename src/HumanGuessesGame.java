@@ -13,7 +13,6 @@ public class HumanGuessesGame {
     private int numGuesses;
     private boolean gameIsDone; // true iff makeGuess has been called with the target value
 
-    //TODO: Edit random
     public HumanGuessesGame(){
         Random randGen = new Random();
         this.target = GetRandom(randGen);
@@ -23,6 +22,7 @@ public class HumanGuessesGame {
     }
 
     //Using dependency injection
+    // TODO: TEST
     public int GetRandom(Random random) {
         return random.nextInt(UPPER_BOUND) + 1;
     }

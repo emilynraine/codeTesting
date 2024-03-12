@@ -15,18 +15,14 @@ import java.util.TreeMap;
  */
 public class StatsFile extends GameStats {
     public static final String FILENAME = "guess-the-number-stats.csv";
-
-
     // maps the number of guesses required to the number of games within
     // the past 30 days where the person took that many guesses
     private SortedMap<Integer, Integer> statsMap;
 
-    //TODO: Split (datetime) (CSVReader)
-    public StatsFile(){
+    public StatsFile(LocalDateTime now, CSVReader csvread){
         statsMap = new TreeMap<>();
-        LocalDateTime limit = LocalDateTime.now().minusDays(30);
 
-        try (CSVReader csvReader = new CSVReader(new FileReader(FILENAME))) {
+        try (CSVReader csvReader = csvread) {
             String[] values = null;
             while ((values = csvReader.readNext()) != null) {
                 // values should have the date and the number of guesses as the two fields
@@ -34,9 +30,7 @@ public class StatsFile extends GameStats {
                     LocalDateTime timestamp = LocalDateTime.parse(values[0]);
                     int numGuesses = Integer.parseInt(values[1]);
 
-                    if (timestamp.isAfter(limit)) {
-                        statsMap.put(numGuesses, 1 + statsMap.getOrDefault(numGuesses, 0));
-                    }
+                    checkTime(timestamp, now, numGuesses);
                 }
                 catch(NumberFormatException nfe){
                     // NOTE: In a full implementation, we would log this error and possibly alert the user
@@ -53,6 +47,13 @@ public class StatsFile extends GameStats {
         } catch (IOException e) {
             // NOTE: In a full implementation, we would log this error and alert the user
             // NOTE: For this project, you do not need unit tests for handling this exception.
+        }
+    }
+
+    // TODO: TEST
+    private void checkTime(LocalDateTime timestamp, LocalDateTime limit, int numGuesses) {
+        if (timestamp.isAfter(limit)) {
+            statsMap.put(numGuesses, 1 + statsMap.getOrDefault(numGuesses, 0));
         }
     }
 
