@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -45,11 +46,10 @@ public class StatsPanel extends JPanel {
 
     private void updateResultsPanel() {
         clearResults();
-
         try {
             this.stats = new StatsFile(LocalDateTime.now().minusDays(30), new CSVReader(new FileReader(FILENAME)));
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            //HANDLE IO
         }
 
         for(int binIndex=0; binIndex<BIN_EDGES.length; binIndex++){
