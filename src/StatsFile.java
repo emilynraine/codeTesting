@@ -51,7 +51,7 @@ public class StatsFile extends GameStats {
     }
 
     // TODO: TEST
-    private void checkTime(LocalDateTime timestamp, LocalDateTime limit, int numGuesses) {
+    public void checkTime(LocalDateTime timestamp, LocalDateTime limit, int numGuesses) {
         if (timestamp.isAfter(limit)) {
             statsMap.put(numGuesses, 1 + statsMap.getOrDefault(numGuesses, 0));
         }

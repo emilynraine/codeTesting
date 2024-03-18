@@ -59,7 +59,7 @@ public class StatsPanel extends JPanel {
     }
 
     // TODO: TEST
-    private int updateResultsNums(int binIndex) {
+    public int updateResultsNums(int binIndex) {
         final int lowerBound = BIN_EDGES[binIndex];
         int numGames = 0;
 
@@ -80,7 +80,7 @@ public class StatsPanel extends JPanel {
     }
 
     // TODO: TEST
-    private int calculateNumGames(int lowerBound, int binIndex) {
+    public int calculateNumGames(int lowerBound, int binIndex) {
         int numGames = 0;
         if (binIndex == BIN_EDGES.length - 1) {
             // Last bin: Sum all the results from lowerBound on up
