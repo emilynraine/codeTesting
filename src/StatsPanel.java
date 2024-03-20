@@ -22,7 +22,7 @@ public class StatsPanel extends JPanel {
 
     // Stats will display the number of games in each "bin"
     // A bin goes from BIN_EDGES[i] through BIN_EDGES[i+1]-1, inclusive
-    private static final int [] BIN_EDGES = {1, 2, 4, 6, 8, 10, 12, 14};
+    public static final int [] BIN_EDGES = {1, 2, 4, 6, 8, 10, 12, 14};
     private ArrayList<JLabel> resultsLabels;
 
     public StatsPanel(JPanel cardsPanel) {
