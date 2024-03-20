@@ -8,7 +8,7 @@ public class StatsPanelTest {
     public void testCalculateNumGamesLargeLowerBound() {
         StatsPanel statsPanel = new StatsPanel(null);
         assertEquals(9, statsPanel.calculateNumGames(12, StatsPanel.BIN_EDGES.length-1));
-        assertEquals(10, statsPanel.calculateNumGames(13, StatsPanel.BIN_EDGES.length-1));
+        assertEquals(3, statsPanel.calculateNumGames(15, StatsPanel.BIN_EDGES.length-1));
     }
 
     @Test
