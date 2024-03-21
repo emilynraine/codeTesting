@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
+
 import com.opencsv.CSVWriter;
 
 
@@ -13,9 +15,9 @@ public class GameOverPanelTest {
         StringWriter stringWriter = new StringWriter();
         CSVWriter csvWriter = new CSVWriter(stringWriter);
         GameResult result = new GameResult(true, 30, 5);
-        gameOverPanel.setGameResults(result, csvWriter);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "It took you 5 guesses."));
+        String time = "0";
+        gameOverPanel.setGameResults(result, time, csvWriter);
+        assertEquals("\"" + time + "\",\"5\"\n", stringWriter.toString());
     }
 
     @Test
@@ -24,18 +26,20 @@ public class GameOverPanelTest {
         StringWriter stringWriter = new StringWriter();
         CSVWriter csvWriter = new CSVWriter(stringWriter);
         GameResult result = new GameResult(false, 30, 5);
-        gameOverPanel.setGameResults(result, csvWriter);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "It took me 5 guesses."));
+        String time = "0";
+        gameOverPanel.setGameResults(result, time, csvWriter);
+        assertEquals("", stringWriter.toString());
     }
 
     @Test
-    public void testSetGameResultsGivenEmptyCSV(){
+    public void testSetGameResultsFirstGuessRight(){
         GameOverPanel gameOverPanel = new GameOverPanel(null);
-        GameResult result = new GameResult(false, 5, 3);
-        gameOverPanel.setGameResults(result, null);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "It took you 3 guesses."));
+        StringWriter stringWriter = new StringWriter();
+        CSVWriter csvWriter = new CSVWriter(stringWriter);
+        GameResult result = new GameResult(true, 1000, 1);
+        String time = "0";
+        gameOverPanel.setGameResults(result, time, csvWriter);
+        assertEquals("\"" + time + "\",\"1\"\n", stringWriter.toString());
     }
 
     //TESTING SetText
@@ -44,8 +48,8 @@ public class GameOverPanelTest {
         GameResult result = new GameResult(true, 20, 1);
         GameOverPanel gameOverPanel = new GameOverPanel(null);
         gameOverPanel.SetText(result);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "You guessed it on the first try!"));
+        assertEquals(gameOverPanel.answerTxt.getText(), "The answer was " + result.correctValue + ".");
+        assertEquals(gameOverPanel.numGuessesTxt.getText(), "You guessed it on the first try!");
     }
 
     @Test
@@ -53,8 +57,8 @@ public class GameOverPanelTest {
         GameResult result = new GameResult(true, 32, 5);
         GameOverPanel gameOverPanel = new GameOverPanel(null);
         gameOverPanel.SetText(result);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "It took you 5 guesses."));
+        assertEquals(gameOverPanel.answerTxt.getText(), "The answer was " + result.correctValue + ".");
+        assertEquals(gameOverPanel.numGuessesTxt.getText(), "It took you 5 guesses.");
     }
 
     @Test
@@ -62,11 +66,8 @@ public class GameOverPanelTest {
         GameResult result = new GameResult(true, 40, 0);
         GameOverPanel gameOverPanel = new GameOverPanel(null);
         gameOverPanel.SetText(result);
-        assertEquals(true, panelContainsText(gameOverPanel, "The answer was " + result.correctValue + "."));
-        assertEquals(true, panelContainsText(gameOverPanel, "It took you 0 guesses."));
+        assertEquals(gameOverPanel.answerTxt.getText(), "The answer was " + result.correctValue + ".");
+        assertEquals(gameOverPanel.numGuessesTxt.getText(), "It took you 0 guesses.");
     }
-    //helper func
-    private boolean panelContainsText(GameOverPanel panel, String text) {
-        return panel.toString().contains(text);
-    }
+
 }

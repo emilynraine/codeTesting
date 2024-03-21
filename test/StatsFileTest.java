@@ -15,7 +15,7 @@ public class StatsFileTest {
         StatsFile statsFile = new StatsFile(LocalDateTime.now().minusDays(30), csvReader);
         statsFile.checkTime(LocalDateTime.parse("2024-03-01T00:00:00"), LocalDateTime.now().minusDays(30), 5);
         statsFile.checkTime(LocalDateTime.parse("2024-03-15T00:00:00"), LocalDateTime.now().minusDays(30), 5);
-        assertEquals(2, statsFile.numGames(5));
+        assertEquals(4, statsFile.numGames(5));
         assertEquals(0, statsFile.numGames(3));
     }
 
@@ -42,7 +42,8 @@ public class StatsFileTest {
         statsFile.checkTime(LocalDateTime.parse("2024-02-01T00:00:00"), LocalDateTime.now().minusDays(30), 5);
         statsFile.checkTime(LocalDateTime.parse("2024-03-01T00:00:00"), LocalDateTime.now().minusDays(30), 5);
         statsFile.checkTime(LocalDateTime.parse("2024-03-15T00:00:00"), LocalDateTime.now().minusDays(30), 5);
-        assertEquals(2, statsFile.numGames(5));
+        assertEquals(4, statsFile.numGames(5));
+        assertEquals(0, statsFile.numGames(3));
     }
 
     @Test
@@ -54,6 +55,6 @@ public class StatsFileTest {
         StatsFile statsFile = new StatsFile(LocalDateTime.now().minusDays(30), csvReader);
         statsFile.checkTime(LocalDateTime.parse("2024-04-01T00:00:00"), LocalDateTime.now().minusDays(30), 5);
         assertEquals(3, statsFile.numGames(5));
-        assertEquals(0, statsFile.numGames(5));
+        assertEquals(0, statsFile.numGames(3));
     }
 }

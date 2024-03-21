@@ -8,25 +8,24 @@ public class HumanGuessesGameTest {
     @Test
     public void testGetRandomValInRange(){
         HumanGuessesGame game = new HumanGuessesGame();
-        assertEquals(true,game.GetRandom(new Random()) >= 1 && game.GetRandom(new Random()) <= HumanGuessesGame.UPPER_BOUND);
+        Random rand = new RandomStub(1, 1);
+        int result = game.GetRandom(rand);
+        assertEquals(2, result);
     }
 
     @Test
-    public void testGetRandomEqualInitialVal() {
-        HumanGuessesGame game1 = new HumanGuessesGame();
-        HumanGuessesGame game2 = new HumanGuessesGame();
-        assertEquals(game1.GetRandom(new Random(567)), game2.GetRandom(new Random(567)));
-    }
-
-    @Test
-    public void testGetRandomNegInitialVal() {
+    public void testGetRandomNumLowerBoundHigh() {
         HumanGuessesGame game = new HumanGuessesGame();
-        assertEquals(true,game.GetRandom(new Random(-567)) >= 1 && game.GetRandom(new Random(-567)) <= HumanGuessesGame.UPPER_BOUND);
+        Random rand = new RandomStub(1000, 1);
+        int result = game.GetRandom(rand);
+        assertEquals(1001, result);
     }
 
     @Test
-    public void testGetRandomIfSameSeed() {
+    public void testGetRandomLowerBoundLower() {
         HumanGuessesGame game = new HumanGuessesGame();
-        assertEquals(246, game.GetRandom(new Random(567)));
+        Random rand = new RandomStub(500, 1000);
+        int result = game.GetRandom(rand);
+        assertEquals(501, result);
     }
 }

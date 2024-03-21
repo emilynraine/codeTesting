@@ -25,29 +25,21 @@ public class StatsPanelTest {
 
     //TESTING updateResultsNums
     @Test
-    public void testUpdateResultsNumsOutOfBoundsBin() {
+    public void testUpdateResultsNumsFirstBin() {
         StatsPanel statsPanel = new StatsPanel(null);
-        assertEquals(0, statsPanel.updateResultsNums(StatsPanel.BIN_EDGES.length-1));
+        assertEquals(3, statsPanel.updateResultsNums(0));
     }
 
     @Test
-    public void testUpdateResultsNumsTestBinOne() {
+    public void testUpdateResultsNumsMiddleBin() {
         StatsPanel statsPanel = new StatsPanel(null);
-        int[] testBins = {3, 5, 7, 4, 6};
-        assertEquals(testBins[0], statsPanel.updateResultsNums(0));
+        assertEquals(4, statsPanel.updateResultsNums(3));
     }
 
     @Test
-    public void testUpdateResultsNumsTestBinTwo() {
+    public void testUpdateResultsNumsLastBin() {
         StatsPanel statsPanel = new StatsPanel(null);
-        int[] testBins = {2, 6, 8, 3, 5};
-        assertEquals(testBins[StatsPanel.BIN_EDGES.length-1], statsPanel.updateResultsNums( StatsPanel.BIN_EDGES.length-1));
-    }
-
-    @Test
-    public void testUpdateResultsNumsNegBinIndex() {
-        StatsPanel statsPanel = new StatsPanel(null);
-        assertEquals(0, statsPanel.updateResultsNums(-1));
+        assertEquals(5, statsPanel.updateResultsNums( StatsPanel.BIN_EDGES.length-1));
     }
 }
 

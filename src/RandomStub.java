@@ -10,7 +10,7 @@ public class RandomStub extends java.util.Random {
     }
 
     @Override
-    public int nextInt() {
+    public int nextInt(int bounds) {
         final int answer = (firstAnswerNext ? firstAnswer : secondAnswer);
         firstAnswerNext = !firstAnswerNext;
         return answer;

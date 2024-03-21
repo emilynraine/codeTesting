@@ -17,8 +17,8 @@ public class GameOverPanel extends JPanel {
 
     private GameResult gameResult;
 
-    private JLabel answerTxt;
-    private JLabel numGuessesTxt;
+    public JLabel answerTxt;
+    public JLabel numGuessesTxt;
 
     private JPanel cardsPanel;
     private JPanel buttonPanel;
@@ -41,7 +41,7 @@ public class GameOverPanel extends JPanel {
      * Sets the game results, updates the UI, and saves results to the log file (if human was playing)
      */
     // TODO: TEST
-    public void setGameResults(GameResult result, CSVWriter writer){ //dependency injection
+    public void setGameResults(GameResult result, String time, CSVWriter writer){ //dependency injection
         this.gameResult = result;
 
         SetText(gameResult);
@@ -49,7 +49,7 @@ public class GameOverPanel extends JPanel {
         if(result.humanWasPlaying){
             // write stats to file
             String [] record = new String[2];
-            record[0] = LocalDateTime.now().toString();
+            record[0] = time;
             record[1] = Integer.toString(result.numGuesses);
 
             writer.writeNext(record);

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import javax.swing.*;
 import com.formdev.flatlaf.*;
 import com.opencsv.CSVWriter;
@@ -72,7 +73,7 @@ public class GuessTheNumberUI {
         //       but refactor how those are structured, which means the lambda will need to change.
         JPanel humanGuessesPanel = new HumanGuessesPanel(cardsPanel, gameResult -> {
             try {
-                gameOverPanel.setGameResults(gameResult, new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
+                gameOverPanel.setGameResults(gameResult, LocalDateTime.now().toString(), new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
             } catch (IOException e) {
                 System.out.println("IO EXCEPTION HUMAN_PLAY");
             }
@@ -86,7 +87,7 @@ public class GuessTheNumberUI {
         // COMPUTER_PLAY
         JPanel computerGuessesPanel = new ComputerGuessesPanel(cardsPanel, gameResult -> {
             try {
-                gameOverPanel.setGameResults(gameResult, new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
+                gameOverPanel.setGameResults(gameResult, LocalDateTime.now().toString(), new CSVWriter(new FileWriter(StatsFile.FILENAME, true)));
             } catch (IOException e) {
                 System.out.println("IO EXCEPTION COMPUTER_PLAY");
             }
